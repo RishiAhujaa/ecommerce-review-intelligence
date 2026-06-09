@@ -87,12 +87,42 @@ def _data_file_mtime() -> float:
     return 0.0
 
 
+HF_DATASET = "RISHI010305/ecommerce-reviews-btp"
+HF_FILES = [
+    "reviews_with_topics.csv",
+    "reviews_with_sentiment.csv",
+    "reviews_final.csv",
+    "reviews_processed.csv",
+]
+
+def _download_from_hf():
+    """Download CSVs from Hugging Face into local data/ folder."""
+    import requests
+    data_dir = Path("data")
+    data_dir.mkdir(exist_ok=True)
+    base_url = f"https://huggingface.co/datasets/{HF_DATASET}/resolve/main"
+    for fname in HF_FILES:
+        dest = data_dir / fname
+        if dest.exists():
+            continue
+        url = f"{base_url}/{fname}"
+        st.info(f"Downloading {fname} from Hugging Face...")
+        r = requests.get(url, stream=True)
+        r.raise_for_status()
+        with open(dest, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+
 @st.cache_data(show_spinner="Loading dataset...")
 def load_data(_mtime: float):
     final = Path("data/reviews_final.csv")
     topics = Path("data/reviews_with_topics.csv")
     sentiment = Path("data/reviews_with_sentiment.csv")
     processed = Path("data/reviews_processed.csv")
+
+    # If no local data found, download from Hugging Face
+    if not any(p.exists() for p in [final, topics, sentiment, processed]):
+        _download_from_hf()
 
     for p in [final, topics, sentiment, processed]:
         if p.exists():
