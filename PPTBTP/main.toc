@@ -1,8 +1,0 @@
-\beamer@sectionintoc {1}{Introduction \& Motivation}{3}{0}{1}
-\beamer@sectionintoc {2}{Dataset \& Preprocessing}{4}{0}{2}
-\beamer@sectionintoc {3}{Sentiment Analysis}{6}{0}{3}
-\beamer@sectionintoc {4}{Topic Modelling}{9}{0}{4}
-\beamer@sectionintoc {5}{Business Intelligence}{11}{0}{5}
-\beamer@sectionintoc {6}{Dashboard \& LLM Agent}{13}{0}{6}
-\beamer@sectionintoc {7}{Results \& Conclusion}{14}{0}{7}
-\beamer@sectionintoc {8}{Industry Internship --- Flipkart}{16}{0}{8}
