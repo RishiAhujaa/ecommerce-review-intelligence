@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Load report.sty first (it loads geometry, hyperref, mathtools, chngcntr, titlesec, setspace, mathptmx)
+\usepackage{report}
+
+% Override geometry to standard margins (after report.sty loads geometry)
+\geometry{a4paper, left=3.5cm, right=2cm, top=3.5cm, bottom=2cm}
+
+% Packages NOT in report.sty
+\usepackage{ragged2e}
+\usepackage{rotating}
+\usepackage{float}
+\usepackage{array}
+\usepackage[justification=centering]{caption}
+\usepackage{booktabs}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{listings}
+\usepackage{amsmath, amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{tocloft}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{siunitx}
+
+\setcounter{secnumdepth}{3}
+\setlength{\cfttabindent}{0pt}
+\setlength{\cftfigindent}{0pt}
+
+\title{Automated Sentiment Analysis and Topic Modelling for E-Commerce Business Intelligence Extraction}
+\author{Akshat Kumar Nayak}
+\date{\today}
+
+\begin{document}
+\input{sec/titlepage}
+\pagenumbering{roman}
+
+\input{sec/declaration}
+\input{sec/acknowledgment}
+\input{sec/abstract}
+
+\newpage
+{
+  \setlength{\parskip}{0em}
+  \tableofcontents
+  \newpage
+  \listoffigures
+  \newpage
+  \listoftables
+}
+
+\newpage
+
+\input{sec/introduction}
+\input{sec/literature_review}
+\input{sec/methodology}
+\input{sec/results}
+\input{sec/conclusion}
+\input{biblio.bib}
+
+\end{document}

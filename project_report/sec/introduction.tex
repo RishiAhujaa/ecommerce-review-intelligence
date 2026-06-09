@@ -1,0 +1,55 @@
+\newpage
+\textbf{\huge CHAPTER 1}\\
+\section{INTRODUCTION}
+\setcounter{section}{1}
+\pagenumbering{arabic}
+
+\subsection{Background}
+\begin{justify}
+The global e-commerce market crossed \$5.8 trillion in 2023 and has been growing at over 10\% annually \cite{ecommerce_growth}. One of the most visible side-effects of this growth is the explosion of user-generated reviews: Amazon alone hosts hundreds of millions of them, and they are widely known to drive purchase decisions. Research suggests that more than 93\% of shoppers read reviews before buying, and even a one-star improvement in average rating can push revenue up by 5--9\% \cite{luca2016reviews}.
+
+The problem is that no human team can keep up with this volume. A product accumulating 10,000 reviews cannot be meaningfully summarised by an analyst in any practical amount of time. This is where NLP comes in — automated pipelines that convert raw review text into structured, actionable information are no longer a nice-to-have for e-commerce businesses; they are increasingly essential.
+
+Two tasks sit at the core of this conversion. \textbf{Sentiment analysis} tells you how customers feel about something — whether a review is positive, negative, or somewhere in between. \textbf{Topic modelling} tells you what they are actually talking about — the themes and issues that keep coming up. Together they answer the two most important questions a product team wants answered: \textit{What are customers complaining about?} and \textit{How strongly do they feel about it?}
+
+Both tasks have come a long way. Sentiment analysis started with simple lexicon lookups, moved through classical ML (SVMs, Naïve Bayes), and now relies heavily on transformer models \cite{devlin2019bert} that understand context in ways rule-based systems never could. Topic modelling followed a similar arc, from probabilistic approaches like LDA \cite{blei2003latent} to neural methods like BERTopic \cite{grootendorst2022bertopic} that use sentence embeddings to produce far more semantically coherent topics.
+
+Most existing systems, however, treat these two tasks in isolation. This project builds an integrated pipeline that jointly extracts topics and sentiment, fuses multiple sentiment signals to improve accuracy, derives structured business intelligence from the combined output, and presents everything through an interactive dashboard with a conversational AI interface.
+\end{justify}
+
+\subsection{Motivation}
+\begin{justify}
+A few concrete observations shaped the design of this project:
+
+\begin{enumerate}
+    \item \textbf{Star ratings are not enough.} A 3-star review could mean almost anything — mediocre product, great product with one flaw, decent product with poor delivery. The text contains the actual reason, and star ratings throw most of that away.
+
+    \item \textbf{Off-the-shelf sentiment models often fail on product reviews.} Many popular classifiers were fine-tuned on movie reviews or formal text (like the SST-2 benchmark). Product review language is informal, jargon-heavy, and structured differently. Running an SST-2 model on Amazon reviews produces noticeable negative bias because phrases like ``works as described'' or ``does what it says'' do not pattern-match to anything in its training distribution.
+
+    \item \textbf{Implicit negativity is common and easy to miss.} A meaningful fraction of dissatisfied customers express their frustration indirectly — ``I guess it works,'' ``not exactly what I expected,'' ``gave it a chance but...'' These score near-neutral on any standard lexicon but are clearly negative. A dedicated detection step is needed to catch them.
+
+    \item \textbf{BERTopic leaves a lot of reviews unlabelled by default.} In initial runs on this dataset, 31--47\% of reviews per category were assigned to the noise cluster (topic $-1$) by HDBSCAN. If left as-is, the downstream BI layer would have less than two-thirds coverage — which is unacceptable for a production pipeline.
+
+    \item \textbf{Most academic NLP work stops at accuracy numbers.} Knowing that a model achieves 86\% accuracy is useful, but a product manager needs to know which topics to fix first, which categories are underperforming, and what customers specifically keep complaining about. Bridging this gap between model output and business action is one of the main goals here.
+\end{enumerate}
+\end{justify}
+
+\subsection{Project Objectives}
+\begin{justify}
+The project aimed to achieve four things:
+
+\begin{enumerate}
+    \item \textbf{Build a multi-model sentiment pipeline} that combines VADER, DistilBERT, and RoBERTa into a weighted fusion score with three-class output (Positive, Neutral, Negative).
+
+    \item \textbf{Apply neural topic modelling} using BERTopic with sentence embeddings, both per-category and globally across all reviews, with effective outlier reduction.
+
+    \item \textbf{Extract structured business intelligence} — priority matrices, category scorecards, aspect-level sentiment breakdowns, and cross-category comparison — directly from the topic-sentiment outputs.
+
+    \item \textbf{Make findings accessible} through an interactive Streamlit dashboard and an LLM-powered chat interface that non-technical users can query in plain English.
+\end{enumerate}
+\end{justify}
+
+\subsection{Report Organisation}
+\begin{justify}
+The rest of this report is laid out as follows. Chapter~2 reviews relevant prior work in sentiment analysis, topic modelling, and Amazon review analytics. Chapter~3 covers the methodology in detail — dataset, preprocessing, models, fusion logic, topic modelling, and BI extraction. Chapter~4 presents the results and discusses what they mean. Chapter~5 wraps up with conclusions and directions for future work.
+\end{justify}

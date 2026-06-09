@@ -1,0 +1,53 @@
+\newpage
+\section*{ABSTRACT}
+\addcontentsline{toc}{section}{ABSTRACT}
+\begin{justify}
+
+With e-commerce growing rapidly, product reviews have become one of the richest sources of customer feedback available to businesses, yet the sheer volume of these reviews makes it practically impossible to read through them manually. This project builds an end-to-end NLP pipeline that processes 172,718 Amazon product reviews across six categories (Electronics, Home \& Kitchen, Clothing Shoes \& Jewelry, Sports \& Outdoors, Grocery \& Gourmet Food, and Toys \& Games) to extract structured business insights from unstructured text. For sentiment analysis, three models of increasing complexity are combined: VADER as a lexicon-based baseline, DistilBERT fine-tuned on SST-2 as a transformer baseline, and \texttt{cardiffnlp/twitter-roberta-base-\allowbreak{}sentiment-latest} (a RoBERTa variant trained on 124 million tweets) as the primary model; their outputs are fused via a weighted combination that also incorporates an implicit negativity detector, producing a final three-class label (Positive, Neutral, Negative) with a binary classification accuracy of \textbf{86.6\%}, a Pearson correlation of \textbf{0.724} with star ratings, and a Cohen's Kappa of \textbf{0.479}. Topic modelling is handled by BERTopic using sentence embeddings (\texttt{all-MiniLM-L6-v2}), UMAP for dimensionality reduction, and HDBSCAN for clustering — applied per category and globally across the full dataset — where c-TF-IDF-based outlier reduction brings the noise cluster assignment from 31--47\% down to below 1\%, enabling near-complete coverage for downstream analysis. The joint topic-sentiment outputs feed a Business Intelligence layer that produces priority matrices, aspect-level sentiment heatmaps, category scorecards, and cross-category comparisons, all exposed through a Streamlit dashboard and a Groq-powered LLM agent (LLaMA-3.3-70B) for natural language querying.
+
+\vspace{0.5cm}
+
+\textbf{Keywords:} Sentiment Analysis, Topic Modelling, BERTopic, RoBERTa, VADER, Business Intelligence, Amazon Reviews, Natural Language Processing, Transformer Models, E-Commerce Analytics.
+
+\vspace{0.5cm}
+
+\begin{table}[h]
+    \centering
+    \small
+    \caption{List of Acronyms}
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{|p{3cm}|p{9cm}|}
+        \hline
+        \textbf{Acronym} & \textbf{Full Form} \\
+        \hline
+        NLP   & Natural Language Processing \\
+        \hline
+        VADER & Valence Aware Dictionary and sEntiment Reasoner \\
+        \hline
+        BERT  & Bidirectional Encoder Representations from Transformers \\
+        \hline
+        RoBERTa & Robustly Optimised BERT Pretraining Approach \\
+        \hline
+        DistilBERT & Distilled BERT \\
+        \hline
+        BERTopic & BERT-based Topic Modelling \\
+        \hline
+        UMAP  & Uniform Manifold Approximation and Projection \\
+        \hline
+        HDBSCAN & Hierarchical Density-Based Spatial Clustering of Applications with Noise \\
+        \hline
+        c-TF-IDF & Class-based Term Frequency -- Inverse Document Frequency \\
+        \hline
+        BI    & Business Intelligence \\
+        \hline
+        LLM   & Large Language Model \\
+        \hline
+        SST-2 & Stanford Sentiment Treebank (binary) \\
+        \hline
+        NPMI  & Normalised Pointwise Mutual Information \\
+        \hline
+    \end{tabular}
+    \label{tab:acronyms}
+\end{table}
+
+\end{justify}

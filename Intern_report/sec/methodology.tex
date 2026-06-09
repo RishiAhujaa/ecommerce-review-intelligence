@@ -1,0 +1,64 @@
+\newpage
+\textbf{\huge CHAPTER  3}\\
+\section{BACKGROUND: SEARCH DATA INGESTION ARCHITECTURE} \setcounter{section}{3}
+\subsection{System Overview}\setcounter{subsection}{1}
+ 
+\begin{justify}
+    To understand the scope and necessity of migrating to Apache Flink, it is essential to deeply analyze the existing Search Data Ingestion Architecture at Flipkart. The primary mandate of this system is to capture continuous updates from various upstream business services, process them into a unified view of a product or listing, and push these updates to downstream search indices and caches in near real-time (NRT). 
+
+    The architecture operates as an asynchronous, event-driven pipeline. It is logically partitioned into four distinct phases: Signal Ingestion, Source Orchestration and Enrichment, Core Stream Processing (the legacy Storm topology), and Sink Orchestration. The following subsections detail the flow of data through these components.
+\end{justify}
+
+\vspace{0.25cm}
+
+\subsection{Phase 1: Signal Ingestion Layer}
+\begin{justify}
+    In an e-commerce ecosystem as massive as Flipkart, a "Product" is not a static entity. Its attributes are constantly mutating based on user interactions, seller updates, and automated algorithmic decisions. The ingestion pipeline begins by listening to these discrete business signals.
+    
+    \begin{itemize}
+        \item \textbf{Signals:} The system ingests various notification packets, primarily categorised into:
+        \begin{itemize}
+            \item \textit{Price \& Availability:} Highly volatile signals that require sub-second latency. A product going out of stock must be immediately reflected to prevent order cancellations and bad user experience.
+            \item \textit{Catalog \& Offers:} Updates regarding product descriptions, images, category mapping, and promotional banking offers.
+            \item \textit{Listing Quality Score (LQS):} Algorithmic scores that determine the ranking and visibility of a listing based on seller performance and product reviews.
+        \end{itemize}
+        \item \textbf{Message Brokers (Varadhi and Poller):} Instead of upstream services hitting the ingestion system with direct HTTP requests (which could overwhelm the system during Big Billion Days), updates are published to message queues. Varadhi, Flipkart's internal multi-tenant message broker, acts as the primary shock absorber. A Poller mechanism ensures that these notification packets are reliably fetched and pushed into the processing stream.
+    \end{itemize}
+\end{justify}
+
+\subsection{Phase 2: Source Orchestration and Enrichment}
+\begin{justify}
+    Once the raw signals are ingested, they enter the streaming ecosystem, primarily backed by Apache Kafka, , which provides high-throughput, fault-tolerant event storage.
+    
+    \begin{itemize}
+        \item \textbf{Source Streams:} The raw notification packets are placed into Kafka topics designated as Source Streams. 
+        \item \textbf{Validation and Enrichment:} Raw signals often contain only the delta (the change). For instance, a price update might only contain the \textit{ProductID} and the \textit{NewPrice}. However, the search engine requires a complete "Document" to index. Therefore, the pipeline performs \textit{Source Enrichment}. It takes the raw signal and fetches the missing metadata (tags, existing catalog details) to perform a \textit{BaseViewTransformation}. This constructs a comprehensive "Base View" of the product, ready for complex processing.
+    \end{itemize}
+\end{justify}
+
+\subsection{Phase 3: Core Processing and State Management (Legacy System)}
+\begin{justify}
+    This phase represents the computational heart of the architecture and the focal point of my internship project. The enriched base views must be merged, processed, and stored as a central source of truth.
+    
+    \begin{itemize}
+        \item \textbf{EntityStore (Listing / Product):} The system uses an Apache HBase cluster as its primary NoSQL datastore. HBase is responsible for maintaining the absolute, current state of every listing and product on Flipkart.
+        \item \textbf{Apache Storm Topology:}  Currently, the stream processing is driven by Apache Storm. The Storm bolts consume the enriched streams, execute business logic, and interact heavily with the HBase EntityStore. For every event, Storm must query HBase to fetch the old state, merge it with the new incoming event, and write the updated state back to HBase. 
+        \item \textbf{The Bottleneck:} This continuous external network I/O to HBase severely limits the system's throughput. Furthermore, Storm's lack of native, localized state management makes handling out-of-order events and guaranteeing exactly-once processing extremely challenging—paving the way for the migration to Apache Flink.
+    \end{itemize}
+\end{justify}
+
+\subsection{Phase 4: Sink Orchestration and Distribution}
+\begin{justify}
+    After the Storm engine successfully updates the state and constructs the final product entity, the data must be fanned out to the serving layers that directly power the Flipkart website and app.
+    
+    \begin{itemize}
+        \item \textbf{Priority Streams and Sink Writers:} Processed entities are written back to output Kafka topics. Crucially, the system employs Priority Streams to ensure that critical updates (like out-of-stock signals) bypass the queue of bulk catalog updates.
+        \item \textbf{Throttling and Transformations:} Before hitting the final destinations, the pipeline applies \textit{Sink View Transformations} to map the internal data model to the specific schema required by each downstream system. Throttling is applied to prevent overwhelming the target datastores.
+        \item \textbf{Target Sinks:}
+        \begin{itemize}
+            \item \textit{Redis:} Acts as a low-latency, in-memory cache for ultra-fast retrieval of product attributes during live user sessions.
+            \item \textit{Apache Solr:} The core NRT Index. Updates are pushed here so the product immediately appears (or disappears) in customer search queries.
+            \item \textit{Offline / Batch Systems:} Data is also routed to Hadoop (HDFS), Ceph storage, and MapReduce jobs for offline analytics, machine learning model training, and the generation of heavily optimized, periodic base indices.
+        \end{itemize}
+    \end{itemize}
+\end{justify}

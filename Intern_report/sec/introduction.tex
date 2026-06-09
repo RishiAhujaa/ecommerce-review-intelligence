@@ -1,0 +1,32 @@
+\textbf{\huge CHAPTER  1}\\
+\section{COMPANY PROFILE} \setcounter{section}{1}
+\subsection{Overview of Flipkart}\setcounter{subsection}{1}
+\pagenumbering{arabic} 
+\begin{justify}
+    Founded in 2007 by Sachin Bansal and Binny Bansal, Flipkart has evolved from a humble online bookstore into India's leading e-commerce marketplace. Headquartered in Bengaluru, Karnataka, the company has fundamentally transformed the retail ecosystem in India through rapid technological innovation, aggressive supply chain scaling, and a deep understanding of the Indian consumer base. Today, Flipkart offers over 150 million products across 80+ categories, including electronics, fashion, home essentials, and groceries. 
+
+    Flipkart's journey is marked by significant milestones, most notably its acquisition by Walmart in 2018, which stands as one of the world's largest e-commerce acquisitions. The company has continuously pioneered industry-first innovations such as Cash on Delivery (CoD), No Cost EMI, and a dedicated in-house supply chain arm, eKart. By democratizing e-commerce for both sellers and buyers across Tier 2, Tier 3, and Tier 4 cities, Flipkart processes millions of shipments daily, requiring an immensely robust and highly scalable technological backbone to ensure a seamless user experience.
+\end{justify}
+
+\vspace{0.25cm}
+
+\subsection{Technological Scale and Engineering Culture}
+\begin{justify}
+    At its core, Flipkart is a technology-first company. The platform operates at an unprecedented scale, catering to over 400 million registered users. This sheer volume of traffic necessitates an engineering infrastructure capable of extreme high availability, fault tolerance, and near real-time (NRT) responsiveness. During peak sale events, such as the flagship "Big Billion Days" (BBD), the platform experiences traffic surges that test the limits of distributed systems, processing tens of thousands of requests per second.
+
+    To support this, Flipkart utilizes a state-of-the-art tech stack built upon microservices architecture, sophisticated data ingestion pipelines, and massive distributed datastores. The company heavily leverages open-source technologies, including Apache Kafka for event streaming, Apache HBase for NoSQL data storage, Redis for high-speed caching, and advanced stream processing engines like Apache Storm and Apache Flink. The engineering culture strongly emphasizes continuous optimization, system reliability, and migrating legacy architectures to more resilient, modern frameworks to handle the ever-increasing data loads efficiently.
+\end{justify}
+
+\subsection{The Search Team at Flipkart}
+\begin{justify}
+    The Search Team operates as the critical gateway between the customer's intent and Flipkart's vast catalog of products. Search is arguably the most revenue-critical component of the e-commerce platform; an optimized, accurate, and fast search experience directly correlates with higher conversion rates and customer satisfaction. The primary responsibility of the Search Team is to ensure that when a user types a query, they are presented with the most relevant, available, and competitively priced products within milliseconds.
+
+    Achieving this requires maintaining complex, real-time search indices using technologies like Apache Solr. The underlying data ingestion architecture must constantly listen to millions of business signals—such as price changes, inventory stock-outs, and new catalog additions—and immediately reflect these changes in the search results. My SDE Winter Internship is anchored within this exact domain, working to modernize and scale the near real-time data ingestion pipelines that feed the central search engine, ensuring that Flipkart's search capabilities remain robust under massive scale.
+\end{justify}
+
+\subsection{Organization of the Report}
+\begin{justify}
+    This internship report is structured to systematically present my work, the architectural deep-dives, and the project implementation during my tenure at Flipkart. The report is organized as follows:
+    
+    \textbf{Chapter 1} introduces the company profile, technological scale, and the specific domain of the Search team. \textbf{Chapter 2} outlines the introduction to my internship project and defines its core objectives. \textbf{Chapter 3} provides the technical background and the current state of the architecture. \textbf{Chapter 4} deeply details the solution approach, the proposed architecture, and the migration strategy from Apache Storm to Apache Flink. \textbf{Chapter 5} discusses the ongoing results, system optimization, and the overall impact on coverage and latency. Finally, \textbf{Chapter 6} presents the conclusion of the internship project and outlines future scopes of work.
+\end{justify}

@@ -1,0 +1,32 @@
+\newpage
+\textbf{\huge CHAPTER 6}\\
+\section{CONCLUSION AND FUTURE SCOPE} \setcounter{section}{6}
+\subsection{Conclusion}\setcounter{subsection}{1}
+% \pagenumbering{arabic} 
+\begin{justify}
+    This SDE Winter Internship at Flipkart, spanning from January 20th to June 26th, has been a profoundly enriching experience in distributed systems engineering. Operating within the Search team under the mentorship of Mr. Vinay and the management of Mr. Abhishek Agarwal, the project successfully addressed one of the most critical infrastructural bottlenecks in Flipkart's e-commerce ecosystem: the near real-time (NRT) ingestion of high-throughput business signals.
+
+    The legacy Apache Storm architecture, while foundational, exhibited severe limitations regarding state management and network I/O overhead due to its synchronous dependency on the Apache HBase EntityStore. Through rigorous architectural evaluation, the strategic migration to Apache Flink was successfully conceptualized, designed, and implemented in a shadow environment. 
+
+    By leveraging Flink's localized embedded state (RocksDB) and exactly-once processing semantics, the proposed ingestion pipeline successfully eliminated millions of external database calls. Shadow testing validated 100\% data parity with the legacy system while projecting a significant reduction in p99 processing latency. The project not only ensures that vital product updates—such as price drops and inventory stock-outs—reach the Apache Solr search indices faster, but it also optimizes computational resource utilization, setting a highly scalable foundation for future peak traffic events like Big Billion Days.
+\end{justify}
+
+\vspace{0.25cm}
+
+\subsection{Future Scope and Production Rollout}
+\begin{justify}
+    While the foundational migration and shadow testing phases have been successfully completed during this internship tenure, the continuous evolution of the Search Data Ingestion platform leaves several avenues for future engineering work:
+    
+    \begin{enumerate}
+        \item \textbf{Phased Production Cutover:} The immediate next step is the gradual, percentage-based routing of live production traffic to the Flink pipeline. This will involve meticulously monitoring downstream systems (Solr and Redis) to ensure no operational anomalies occur before fully decommissioning the legacy Storm cluster.
+        \item \textbf{Advanced Real-Time Enrichment:} With Flink's robust state management in place, the pipeline can be extended to support complex, real-time machine learning inferences. For instance, dynamically recalculating the Listing Quality Score (LQS) within the stream based on real-time click-through rate (CTR) signals, rather than relying on batch updates.
+        \item \textbf{Cross-Data Center (CDC) Replication Optimization:} Future iterations of the architecture can explore optimizing Flink's checkpointing mechanisms across multiple geographical data centers, ensuring ultra-high availability and zero downtime even in the event of a complete regional outage.
+    \end{enumerate}
+\end{justify}
+
+\subsection{Personal Learnings and Growth}
+\begin{justify}
+    Beyond the technical deliverables, this internship provided invaluable exposure to industry-standard software development lifecycles. I gained hands-on experience in writing production-grade, fault-tolerant code, deeply understanding event-driven microservices architectures, and utilizing big data technologies at an unprecedented scale. 
+
+    The collaborative engineering culture at Flipkart, coupled with the academic foundation provided by my college supervisor, Dr. Santosh Singh Rathore, has fundamentally shaped my approach to solving complex architectural problems. The skills acquired during this tenure will serve as a robust cornerstone for my future career as a Software Development Engineer.
+\end{justify}

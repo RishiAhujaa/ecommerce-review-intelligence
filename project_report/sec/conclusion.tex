@@ -1,0 +1,58 @@
+\newpage
+\textbf{\huge Chapter 5}
+\section{CONCLUSION AND FUTURE WORK}
+
+\subsection{Conclusion}
+\begin{justify}
+This project built a complete end-to-end NLP pipeline for automated sentiment analysis and topic modelling over 172,718 Amazon product reviews across six categories. The main contributions and findings are summarised below.
+
+\textbf{Multi-model sentiment fusion.} Rather than relying on a single model, the pipeline combines VADER, DistilBERT, and \texttt{cardiffnlp/twitter-roberta-base-\allowbreak{}sentiment-latest} into a weighted fusion with an implicit negativity penalty. The result is \textbf{86.6\% binary classification accuracy}, a Pearson correlation of \textbf{0.724} with star ratings, and a Cohen's Kappa of \textbf{0.479} — gains of +14.0 pp over VADER and +5.4 pp over DistilBERT. This confirms that choosing a domain-matched pre-training corpus (tweets vs.\ formal movie reviews) has a measurable and significant effect on product review classification.
+
+\textbf{Neural topic modelling with outlier reduction.} BERTopic was applied to each of the six product categories individually and once globally across all reviews, producing 11--18 semantically meaningful topics per category. The outlier reduction step — c-TF-IDF cosine similarity reassignment — brought noise from 31--47\% per category down to below 1\%, enabling near-complete BI coverage. Topic coherence scores (NPMI 0.281--0.319) are in line with published BERTopic results on short text and substantially better than LDA baselines.
+
+\textbf{Structured BI extraction.} The joint topic-sentiment framework generates four types of business intelligence output: priority matrices that rank topics by combined volume and negativity, aspect-level sentiment across eight product dimensions, category scorecards with NPS-proxy metrics, and cross-category gap analysis. These outputs are immediately actionable for product managers without requiring any NLP background.
+
+\textbf{Dashboard and LLM agent.} A Streamlit dashboard with six analytical pages exposes all pipeline outputs as interactive visualisations. The Groq-powered LLM agent (LLaMA-3.3-70B) generates per-category narrative reports and handles ad-hoc queries in natural language. Qualitative evaluation on 20 test questions showed factually consistent, domain-aware responses at an average latency of 2.1 seconds.
+
+Overall, the project shows that combining a domain-appropriate transformer model, neural topic modelling with effective outlier handling, and a structured BI extraction layer produces a system that works well both technically and in terms of practical usefulness.
+\end{justify}
+
+\subsection{Limitations}
+\begin{justify}
+Some limitations of the current system are worth acknowledging:
+
+\begin{enumerate}
+    \item \textbf{Ground-truth approximation.} Star ratings are used as sentiment ground truth. This is noisy for borderline reviews — a 2-star review can contain genuinely mixed sentiment, not pure negativity.
+
+    \item \textbf{Fixed fusion weights.} The 0.4/0.6 split between VADER and RoBERTa was set empirically. Training a learned combination on a labelled validation set would likely push accuracy higher.
+
+    \item \textbf{English-only.} Everything in the pipeline — preprocessing, implicit negativity patterns, embeddings, and sentiment models — is designed for English. Extending to other languages would require swapping out most components.
+
+    \item \textbf{Keyword-based aspect sentiment.} The aspect detection is simple keyword matching, which means paraphrased or implied aspect mentions are missed. A proper span-level ABSA model would be more accurate but harder to scale.
+
+    \item \textbf{Static topic model.} BERTopic is trained offline on the full dataset. New reviews would need periodic retraining rather than continuous updates. An online variant would solve this.
+\end{enumerate}
+\end{justify}
+
+\subsection{Future Work}
+\begin{justify}
+Several directions could meaningfully extend this work:
+
+\begin{enumerate}
+    \item \textbf{Learned sentiment fusion.} Training a logistic regression or small neural layer to combine VADER, DistilBERT, and RoBERTa outputs could replace the hand-tuned weights and potentially push accuracy beyond 86.6\%.
+
+    \item \textbf{Domain-adapted fine-tuning.} Fine-tuning RoBERTa directly on Amazon reviews using star ratings as distant supervision would further close the gap between tweet training data and product review language.
+
+    \item \textbf{Span-level ABSA.} Replacing keyword matching with a BERT-based aspect-opinion extraction model (e.g., ASTE or BARTABSA) would give far more precise aspect-sentiment pairs.
+
+    \item \textbf{Temporal trend tracking.} The dataset includes review timestamps that are currently unused. Incorporating them would allow tracking of how sentiment and topic prominence shift over time — useful for detecting quality regressions after product updates or supply chain changes.
+
+    \item \textbf{Online topic modelling.} An incremental BERTopic variant that can absorb new reviews without full retraining would make the dashboard practical for real-time use.
+
+    \item \textbf{Multi-lingual support.} Swapping English-only components for multilingual alternatives — \texttt{paraphrase-multilingual-MiniLM-L12-v2} for embeddings, mBERT or XLM-R for sentiment — would broaden the pipeline's applicability significantly.
+
+    \item \textbf{Reviewer-level calibration.} Leveraging reviewer IDs to identify habitually negative or lenient reviewers and applying per-reviewer adjustments to the sentiment scores could reduce individual bias in aggregate statistics.
+
+    \item \textbf{Containerised deployment.} Packaging the pipeline as a Docker + FastAPI microservice with asynchronous batch inference would enable real-time ingestion of new reviews at production scale.
+\end{enumerate}
+\end{justify}

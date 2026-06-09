@@ -1,0 +1,27 @@
+\newpage
+\clearpage
+\textbf{\huge Chapter 6} 
+\section{FUTURE SCOPE}
+\begin{justify}
+While the current mid-term implementation successfully clusters and categorizes raw text, the final phase of the project will focus on extracting actionable business intelligence and deploying the model for end-user interaction. The future scope of this project encompasses the following key objectives:
+
+\vspace{0.5cm} % Adds a little breathing room
+
+\textbf{1. Integration of Aspect-Based Sentiment Analysis:}\\
+Identifying what customers are talking about (Topic Modeling) is only half the solution. In the next phase, we will integrate lexical sentiment analysis models, such as VADER (Valence Aware Dictionary and sEntiment Reasoner) or transformer-based models like RoBERTa. This will allow the system to calculate a polarity score (Positive, Negative, Neutral) for each specific topic, enabling businesses to understand not just \textit{what} is being discussed, but \textit{how} customers feel about it.
+
+\vspace{0.3cm}
+
+\textbf{2. Model Comparison and Optimization:}\\
+To ensure the highest quality of topic extraction, the final project will benchmark the current LDA model against other state-of-the-art algorithms. We plan to implement Non-Negative Matrix Factorization (NMF) and potentially BERTopic (which uses sentence-transformers) to compare coherence scores and semantic quality.
+
+\vspace{0.3cm}
+
+\textbf{3. Development of an Interactive Business Dashboard:}\\
+To make the insights accessible to non-technical stakeholders, we will develop a dynamic Web GUI using frameworks like Streamlit or Dash. This dashboard will allow users to upload new CSV datasets of reviews, dynamically adjust hyperparameters (like the number of topics), and visualize the sentiment-topic distribution through interactive charts and word clouds in real-time.
+
+\vspace{0.3cm}
+
+\textbf{4. Temporal Trend Analysis:}\\
+If timestamp data is available in future datasets, we aim to implement dynamic topic modeling to track how customer opinions and topics evolve over time. This will be highly beneficial for tracking shifts in customer sentiment after a specific product launch or policy change.
+\end{justify}

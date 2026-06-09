@@ -1,0 +1,56 @@
+\newpage
+\textbf{\huge Chapter 3} 
+% \pagenumbering{arabic}
+\section{SOLUTION APPROACH}
+    FinOps security guardrails play a crucial role in securing public billing budget APIs by integrating them into the advanced Kollo framework. This framework is specifically designed to streamline and standardize the process of testing services across various cloud horizontals, ensuring both existing and future APIs are consistently protected. Let’s delve into the specifics of the APIs tested and the application of different horizontals within this framework.
+
+    \textbf{Testing and Integration}\\
+    To achieve a thorough and effective security posture, I conducted tests on five essential billing budget APIs. These APIs encompass critical functionalities such as create, delete, update, list, and get budgets. Each of these APIs was rigorously tested using the Kollo framework, which applies security policies across three distinct cloud horizontals: MAF, Deny, and PAB. This comprehensive approach ensures that multiple layers of security are applied, providing robust protection against various potential threats.
+
+    The \textbf{MAF-smoke-test} policy is foundational within this framework. It serves as a preliminary check to confirm that all security policies are functioning correctly before any detailed testing is conducted. This initial smoke test is essential for validating the operational status of basic policies and ensuring that the testing environment is properly set up. It acts as a prerequisite for further, more specific policy tests, thereby setting a solid foundation for comprehensive security evaluations.
+
+    In the Deny horizontal, a range of policies are implemented, some of which might be deprecated or outside the scope of certain tests. One key policy used in this context is the \textbf{deny-granular-org-level-denied-sa} policy. This policy is crucial for testing the creation of budgets at the billing account level, which is directly linked to the organization. It ensures that access to resources is tightly controlled at the organizational level, preventing unauthorized access even for service accounts that may have broader permissions within the cloud environment. This granular approach to denial policies helps mitigate potential security risks by enforcing strict access controls.
+
+   The \textbf{PAB} horizontal includes several important policies that manage access based on user and workload identities. These policies are designed to enforce clear access boundaries and ensure that resources are only accessible to authorized entities. Key policies within this horizontal include:
+
+    \textbf{PAB-Allow:}\\
+    This policy defines the permissions granted to users or workloads, establishing clear access boundaries for specific resources. It ensures that only authorized entities can access certain resources, aligning with security and compliance requirements.
+    
+    \textbf{PAB-Deny:}\\
+    This policy sets boundaries by explicitly denying access to particular resources. It is essential for blocking unauthorized entities from accessing sensitive resources, even if broader permissions exist elsewhere in IAM.
+    
+    \textbf{PAB-Workload-Identity-Allow:}\\
+    This policy governs access permissions for workloads operating with Cloud Workload Identity within the Cloud Billing environment. It allows applications running on Google Cloud Platform (GCP) to assume service account identities without requiring explicit credentials. This simplifies identity management and enhances security by reducing the need for direct credential handling.
+    
+    \textbf{PAB-Workforce-Identity-Allow:}\\
+    This policy manages access for users or groups utilizing Cloud Workload Identity Federation. It enables users to authenticate with GCP services using their existing corporate credentials, facilitating secure access management and ensuring that access control policies align with organizational identity management practices.
+
+Let’s delve into the intricate design of the Deny horizontal, shown in figure 3.1, which is executed through a meticulous three-phase testing process to ensure robust access control and comprehensive security validation.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{deny_workflow.png}
+    \caption{IAM Deny policy workflow}
+    \label{fig:enter-label}
+\end{figure}
+\\
+\textbf{Phase 1: Environment Setup}\\
+The first phase involves laying the groundwork for the testing environment. This setup process includes creating an organizational structure that comprises an organization, a billing account, and nested projects within the organization. To facilitate the testing of the deny-granular-org-level-denied-sa policy, two service accounts are established: maf-test and sa-none.
+
+Both service accounts are assigned ownership of the project to enable thorough testing. However, there is a significant distinction between them: the maf-test account is included in an allow list, granting it permissions necessary for the testing process. In contrast, the sa-none account is deliberately placed on a deny list, meaning it will be restricted from accessing certain resources. This deliberate placement is crucial for evaluating the effectiveness of the deny policy.
+
+Once the service accounts are configured, I proceed to configure the specific service being tested. This involves specifying the service endpoint, the API version, and all the Remote Procedure Calls (RPCs) that will be used during the testing. These RPCs serve as detailed instructions for making API calls and executing various operations, which are essential for assessing the policy's enforcement.
+
+\textbf{Phase 2: Executing the Test}\\
+In the second phase, the testing is executed with a focus on evaluating the effectiveness of the deny policy. The maf-test service account, which possesses the necessary permissions, initiates the testing process. This account configures the API environment and ensures that the deny policy is properly applied to restrict access specifically for the sa-none service account.
+
+During this phase, a series of budget-related operations are performed using the sa-none service account. Given that this account is on the deny list, it should encounter permission errors when attempting to execute these operations. This behavior is anticipated and confirms that the deny policy is functioning as intended, effectively blocking access as specified.
+
+After conducting these tests, any budgets or resources created during the process are meticulously cleaned up. This cleanup step is crucial to ensure that no residual data or configurations remain, providing a clean slate for subsequent testing phases and maintaining the integrity of the testing environment.
+
+\textbf{Phase 3: Automated Post-Test Cleanup}\\
+The final phase of the process involves automated post-test cleanup, which is managed by the Kollo framework. Kollo scans the testing environment for any resources that may have been unintentionally left behind after the testing process. This includes identifying and eliminating any leftover data or configurations to ensure that the environment is pristine and ready for future tests.
+
+By automating this cleanup process, Kollo helps maintain an organized and efficient testing environment. This ensures that each testing cycle is conducted under consistent conditions, free from any remnants of previous tests that could impact the accuracy or reliability of future evaluations.
+\newpage
+

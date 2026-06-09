@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(source:*)",
+      "WebSearch",
+      "Bash(kill:*)",
+      "Bash(sleep:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(pkill:*)",
+      "Bash(sed:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep -v \"^$\")",
+      "Bash(which gs:*)",
+      "Bash(find:*)",
+      "Bash(export:*)",
+      "Bash(which pdflatex:*)",
+      "Bash(pdflatex:*)"
+    ]
+  }
+}

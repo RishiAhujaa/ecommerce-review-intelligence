@@ -1,0 +1,12 @@
+\contentsline {figure}{\numberline {3.1}{\ignorespaces System architecture: end-to-end pipeline from raw reviews to business intelligence dashboard.}}{9}{figure.caption.3}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Star rating distribution across six product categories. Each group of five bars represents one star level (1--5).}}{10}{figure.caption.5}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Binary classification accuracy comparison across VADER, DistilBERT, and the fused RoBERTa+VADER model (3-star reviews excluded).}}{19}{figure.caption.9}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Confusion matrix for the fused RoBERTa+VADER model on binary classification (3-star reviews excluded).}}{20}{figure.caption.10}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Percentage of reviews predicted as Positive per star rating by the fused model. Red bars = ground-truth Negative; green bars = ground-truth Positive.}}{21}{figure.caption.11}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Three-class sentiment distribution (Positive / Neutral / Negative) per product category.}}{22}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Left: number of topics discovered per category. Right: noise cluster assignment (\%) before and after c-TF-IDF outlier reduction.}}{24}{figure.caption.17}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Priority matrix: top-5 topics per category ranked by priority score (Eq.~\ref {eq:priority}). Darker cells indicate higher urgency for remediation.}}{25}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Aspect-level mean sentiment score heatmap. Green = positive sentiment; red = negative sentiment. Scores range from $-1$ to $+1$.}}{26}{figure.caption.21}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Category scorecard: mean sentiment score (left) and NPS-proxy (right) for all six product categories.}}{27}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Scatter plot of VADER raw score vs.\ fused sentiment score (5,000-review sample), coloured by predicted label. The spread shows how fusion modifies VADER's output, especially for ambiguous mid-range scores.}}{28}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Implicit negativity detection rate per category. Electronics has the highest rate (highlighted in red).}}{29}{figure.caption.26}%

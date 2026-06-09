@@ -1,0 +1,36 @@
+% Abstract
+\newpage
+\section*{ABSTRACT}
+\addcontentsline{toc}{section}{ABSTRACT}
+\begin{justify}
+    Flipkart's Search platform processes millions of near real-time (NRT) business signals daily — spanning price changes, inventory stock-outs, and catalog metadata updates — requiring a low-latency data ingestion pipeline that continuously synchronises the live Apache Solr search index and Redis cache layers. This industry internship report, undertaken at Flipkart Internet Pvt.\ Ltd.\ from January to June 2026, details the architectural analysis, design, and implementation of a strategic migration of the core stream processing engine from Apache Storm to Apache Flink within the Search Data Ingestion team. The legacy Storm topology, while reliable, operates as a stateless processing engine dependent on synchronous network calls to an external Apache HBase EntityStore for every event, introducing significant I/O bottlenecks and limiting the system to at-least-once processing semantics. The proposed Flink-based architecture eliminates this dependency by leveraging Flink's embedded RocksDB state backend, replacing millions of external HBase reads per minute with sub-millisecond local state access, and provides end-to-end exactly-once guarantees through the Chandy-Lamport distributed checkpointing algorithm. My specific contributions include: (i) implementing the Kafka integration layer using \texttt{FlinkKafkaConsumer} with checkpoint-coordinated offset commits and a transactional \texttt{FlinkKafkaProducer} for exactly-once sink semantics; and (ii) integrating Flipkart's internal Latency Pill observability middleware into the Flink operator graph, enabling per-stage latency tracing and p99 dashboard visibility. Shadow testing over millions of catalog and pricing events validated 100\% data parity with the Storm baseline while projecting a greater than 40\% reduction in p99 ingestion latency, confirming the architectural viability of the migration. Table 0.1 provides a list of technical acronyms used throughout this report.
+
+    \begin{table}[h]
+        \centering
+        \small
+        \caption{List of Acronyms}
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{|p{3cm}|p{9cm}|}
+            \hline
+            \textbf{Acronym} & \textbf{Full Form} \\
+            \hline
+            SDE & Software Development Engineer \\
+            \hline
+            NRT & Near Real-Time \\
+            \hline
+            API & Application Programming Interface \\
+            \hline
+            DAG & Directed Acyclic Graph \\
+            \hline
+            HBase & Hadoop Database \\
+            \hline
+            Solr & Search on Lucene with Replication \\
+            \hline
+            FDP & Flipkart Data Platform \\
+            \hline
+            JSON & JavaScript Object Notation \\
+            \hline
+        \end{tabular}
+        \label{tab:acronyms}
+    \end{table}
+\end{justify}
