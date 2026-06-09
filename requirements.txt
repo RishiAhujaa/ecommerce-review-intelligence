@@ -16,10 +16,7 @@ torch>=2.2.0
 bertopic>=0.16.0
 umap-learn>=0.5.6
 hdbscan>=0.8.33
-gensim>=4.3.0
-
-# Sentiment
-vaderSentiment>=3.3.2
+gensim==4.3.3
 
 # Visualization
 plotly>=5.22.0
@@ -42,3 +39,4 @@ rich>=13.7.0
 huggingface_hub>=0.23.0
 datasets>=2.20.0
 requests>=2.32.0
+python-dotenv>=1.0.0
