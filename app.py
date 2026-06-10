@@ -94,40 +94,34 @@ HF_FILES = [
     "reviews_final.csv",
     "reviews_processed.csv",
 ]
+DATA_DIR = Path("data")
 
-def _download_from_hf():
-    """Download CSVs from Hugging Face into local data/ folder."""
-    import requests
-    data_dir = Path("data")
-    data_dir.mkdir(exist_ok=True)
-    base_url = f"https://huggingface.co/datasets/{HF_DATASET}/resolve/main"
+def _ensure_data():
+    from huggingface_hub import hf_hub_download
+    DATA_DIR.mkdir(exist_ok=True)
     for fname in HF_FILES:
-        dest = data_dir / fname
+        dest = DATA_DIR / fname
         if dest.exists():
             continue
-        url = f"{base_url}/{fname}"
-        st.info(f"Downloading {fname} from Hugging Face...")
-        r = requests.get(url, stream=True)
-        r.raise_for_status()
-        with open(dest, "wb") as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                f.write(chunk)
+        hf_hub_download(
+            repo_id=HF_DATASET,
+            filename=fname,
+            repo_type="dataset",
+            local_dir=str(DATA_DIR),
+        )
 
-@st.cache_data(show_spinner="Loading dataset...")
+@st.cache_data(show_spinner="Loading dataset... (first load may take a few minutes)")
 def load_data(_mtime: float):
-    final = Path("data/reviews_final.csv")
-    topics = Path("data/reviews_with_topics.csv")
-    sentiment = Path("data/reviews_with_sentiment.csv")
-    processed = Path("data/reviews_processed.csv")
-
-    # If no local data found, download from Hugging Face
-    if not any(p.exists() for p in [final, topics, sentiment, processed]):
-        _download_from_hf()
-
-    for p in [final, topics, sentiment, processed]:
+    _ensure_data()
+    priority = [
+        DATA_DIR / "reviews_with_topics.csv",
+        DATA_DIR / "reviews_final.csv",
+        DATA_DIR / "reviews_with_sentiment.csv",
+        DATA_DIR / "reviews_processed.csv",
+    ]
+    for p in priority:
         if p.exists():
             df = pd.read_csv(p)
-            # Ensure required columns exist
             if "final_sentiment" not in df.columns:
                 df["final_sentiment"] = "Neutral"
             if "sentiment_score" not in df.columns:
@@ -139,8 +133,7 @@ def load_data(_mtime: float):
             if "implicit_negative" not in df.columns:
                 df["implicit_negative"] = False
             return df
-
-    st.error("No processed data found. Please run `python pipeline.py` first.")
+    st.error("No processed data found.")
     st.stop()
 
 
